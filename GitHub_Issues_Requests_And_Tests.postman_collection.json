@@ -1,0 +1,580 @@
+{
+	"info": {
+		"_postman_id": "d5194810-a6ef-4da7-ac07-384850183b1b",
+		"name": "GitHub_Issues_Requests_And_Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET",
+			"item": [
+				{
+					"name": "GET_All_Issues",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var body = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Check status code\", function(){\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check status\", function(){\r",
+									"    pm.expect(pm.response.status).to.equal('OK');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Title to be string\", function(){\r",
+									"    pm.expect(typeof(body[0].title)).to.equal('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check issue URL\", function(){\r",
+									"    pm.expect(body[0].url).to.contain('github');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n",
+							"options": {
+								"raw": {
+									"language": "javascript"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.github.com/repos/{{user}}/{{repo}}/issues",
+							"protocol": "https",
+							"host": [
+								"api",
+								"github",
+								"com"
+							],
+							"path": [
+								"repos",
+								"{{user}}",
+								"{{repo}}",
+								"issues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_Single_Issue",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let body = pm.response.json();\r",
+									"let issueNumber = body.number;\r",
+									"let issueURL = \"https://api.github.com/repos/milentasev/Postman/issues/\";\r",
+									"\r",
+									"pm.test(\"Check status code\", function(){\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check status\", function(){\r",
+									"    pm.expect(pm.response.status).to.equal('OK');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check status code ES6\", () =>{\r",
+									"    pm.expect(pm.response.code, \"STATUS CODE\").to.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check status code other way\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check issue URL\", function(){\r",
+									"    pm.expect(body.url, \"URL property\").to.equal(issueURL + issueNumber);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check issue number\", function(){\r",
+									"    pm.expect(body.number, \"Number property\").to.equal(15);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check ID number\", function(){\r",
+									"    pm.expect(body.id, \"ID property\").to.be.greaterThan(1); \r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.github.com/repos/{{user}}/{{repo}}/issues/15",
+							"protocol": "https",
+							"host": [
+								"api",
+								"github",
+								"com"
+							],
+							"path": [
+								"repos",
+								"{{user}}",
+								"{{repo}}",
+								"issues",
+								"15"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "basic"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "POST",
+			"item": [
+				{
+					"name": "Create_Issue",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let body = pm.response.json();\r",
+									"let number = body.number;\r",
+									"console.log(\"BODY: \", body);\r",
+									"\r",
+									"pm.test(\"Check status code\", function(){\r",
+									"    pm.expect(pm.response.code).to.equal(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check status\", function(){\r",
+									"    pm.expect(pm.response.status).to.equal('Created');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check status code ES6\", () =>{\r",
+									"    pm.expect(pm.response.code, \"STATUS CODE\").to.equal(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check status code other way\", function(){\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check issue URL\", function(){\r",
+									"    let url = \"https://api.github.com/repos/milentasev/Postman/issues/\" + number\r",
+									"    pm.expect(body.url, \"URL property\").to.equal(url);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Check issue number\", function(){\r",
+									"    pm.expect(body.number, \"Number property\").to.be.greaterThan(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check ID number\", function(){\r",
+									"    pm.expect(body.id, \"ID property\").to.be.greaterThan(1);\r",
+									"});\r",
+									"\r",
+									"pm.test (\"Check if title exists\", function(){\r",
+									"pm.expect(body.title).to.contain('Issue');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"title\" : \"Issue for GitHub from Postman\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.github.com/repos/{{user}}/{{repo}}/issues",
+							"protocol": "https",
+							"host": [
+								"api",
+								"github",
+								"com"
+							],
+							"path": [
+								"repos",
+								"{{user}}",
+								"{{repo}}",
+								"issues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_Issue_With_Body_And_Labels",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let body = pm.response.json();\r",
+									"let number = body.number;\r",
+									"\r",
+									"pm.test('HTTP Status code', function(){\r",
+									"    pm.expect(pm.response.code).to.equal(201);\r",
+									"});\r",
+									"\r",
+									"pm.test('Check status', function(){\r",
+									"    pm.expect(pm.response.status).to.equal('Created');\r",
+									"});\r",
+									"\r",
+									"pm.test('Check issue URL', function(){\r",
+									"    pm.expect(body.url).to.equal('https://api.github.com/repos/milentasev/Postman/issues/'+ number);\r",
+									"});\r",
+									"\r",
+									"pm.test('Check issue number', function(){\r",
+									"    pm.expect(typeof(body.number)).to.equals('number');\r",
+									"    pm.expect(body.number, 'Number property').to.be.greaterThan(0);\r",
+									"});\r",
+									"\r",
+									"pm.test('Check issue ID', function(){\r",
+									"    pm.expect(typeof(body.id)).to.equals('number');\r",
+									"    pm.expect(body.id, 'ID property').to.be.greaterThan(1);\r",
+									"});\r",
+									"\r",
+									"pm.test('Check if title exists', function(){\r",
+									"    pm.expect(typeof(body.title)).to.equals('string');\r",
+									"    pm.expect(body.title).to.contain('Issue');\r",
+									"});\r",
+									"\r",
+									"pm.test('Check if body exists', function(){\r",
+									"    pm.expect(body.body).to.contain('problem');\r",
+									"});\r",
+									"\r",
+									"pm.test('Check if issue is open', function(){\r",
+									"    pm.expect(body.state).to.equal('open');\r",
+									"}); \r",
+									"\r",
+									"pm.test('Check if first label exists', function(){\r",
+									"    pm.expect(body.labels[0].id).to.be.greaterThan(1);\r",
+									"    pm.expect(body.labels[0].name).to.equal('bug');\r",
+									"});\r",
+									"\r",
+									"pm.test('Check if first label exists', function(){\r",
+									"    pm.expect(body.labels[1].id).to.be.greaterThan(1);;\r",
+									"    pm.expect(body.labels[1].name).to.equal('importance:medium');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"title\" : \"Issue for GitHub from Postman\",\r\n\"body\" : \"I am having problem with this\",\r\n\"labels\" : [\"bug\", \"importance:medium\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.github.com/repos/{{user}}/{{repo}}/issues",
+							"protocol": "https",
+							"host": [
+								"api",
+								"github",
+								"com"
+							],
+							"path": [
+								"repos",
+								"{{user}}",
+								"{{repo}}",
+								"issues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_A_Comment_For_Issue",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var body = pm.response.json();\r",
+									"\r",
+									"pm.test(\"HTTP Status code\", function(){\r",
+									"pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check status\", function(){\r",
+									"pm.expect(pm.response.status).to.equal('Created');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check ID number\", function(){\r",
+									"    pm.expect(body.id, \"ID property\").to.be.greaterThan(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check comment\", function(){\r",
+									"    pm.expect(body.body).to.equal('Leaving a comment here');\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"body\" :\"Leaving a comment here\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.github.com/repos/{{user}}/{{repo}}/issues/16/comments",
+							"protocol": "https",
+							"host": [
+								"api",
+								"github",
+								"com"
+							],
+							"path": [
+								"repos",
+								"{{user}}",
+								"{{repo}}",
+								"issues",
+								"16",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "UPDATE",
+			"item": [
+				{
+					"name": "Update_Issue",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var body = pm.response.json();\r",
+									"\r",
+									"pm.test(\"HTTP status code\", function(){\r",
+									" pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"HTTP status\", function(){\r",
+									" pm.expect(pm.response.status).to.equal('OK');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check issue ID\", function(){\r",
+									"    pm.expect(body.id).to.be.greaterThan(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check issue number\", function(){\r",
+									"    pm.expect(body.number).to.be.greaterThan(0);\r",
+									"});\r",
+									"\r",
+									"pm.test (\"Check if title is eddited\", function(){\r",
+									"    pm.expect(body.title).to.contain('Edited');\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Check if first label is updated\", function(){\r",
+									"    pm.expect(body.labels[0].name).to.equal('bug');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check if second label is updated\", function(){\r",
+									"    pm.expect(body.labels[1].name).to.equal('importance: high');\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"title\" : \"Edited bug (Issue for GitHub fom Postman)\",\r\n\"labels\" : [\"bug\", \"importance: high\"]\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.github.com/repos/{{user}}/{{repo}}/issues/16\n",
+							"protocol": "https",
+							"host": [
+								"api",
+								"github",
+								"com"
+							],
+							"path": [
+								"repos",
+								"{{user}}",
+								"{{repo}}",
+								"issues",
+								"16\n"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
